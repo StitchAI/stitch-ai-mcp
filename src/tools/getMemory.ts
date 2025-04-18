@@ -1,37 +1,38 @@
 import { z } from 'zod';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { MemoryEntry } from '../types/memory';
 import { AxiosInstance } from 'axios';
 
 export function registerGetMemory(
-  server: McpServer,
-  memoryDB: Record<string, MemoryEntry[]>,
+  server: McpServer,  
   httpClient: AxiosInstance
 ) {
   server.tool(
     'get_memory',
-    { id: z.string(), version: z.number().optional() },
-    async ({ id, version }) => {
-      const history = memoryDB[id];
-      if (!history) {
-        return { content: [{ type: 'text', text: `Memory ID '${id}' not found.` }] };
+    'Retrieves a specific memory by ID from a memory space',
+    { 
+      space: z.string().describe('The name of the memory space'),
+      memory_id: z.string().describe('The ID of the memory to retrieve')
+    },
+    async ({ space, memory_id }) => {
+      const response = await httpClient.get(`/memory/${space}/${memory_id}`);
+      
+      const memory = response.data;
+      
+      let resultText = `Memory details:\n`;
+      resultText += `- ID: ${memory.id}\n`;
+      resultText += `- Space: ${memory.space}\n`;
+      resultText += `- Message: ${memory.message}\n`;
+      
+      if (memory.data.episodic) {
+        resultText += `- Episodic Memory: ${memory.data.episodic}\n`;
       }
-      const entry = version
-        ? history.find(e => e.version === version)
-        : history[history.length - 1];
-      if (!entry) {
-        return { content: [{ type: 'text', text: `Version ${version} not found for ID '${id}'.` }] };
+      
+      if (memory.data.character) {
+        resultText += `- Character Memory: ${memory.data.character}\n`;
       }
-
-      // GET session metadata from Stitch AI
-      const resp = await httpClient.get(`/v1/memory/${id}/session`);
-      const sessionMeta = resp.data;
-
+      
       return {
-        content: [
-          { type: 'text', text: `[Memory ${id} v${entry.version}] ${entry.content}` },
-          { type: 'text', text: `Session meta: ${JSON.stringify(sessionMeta)}` }
-        ]
+        content: [{ type: 'text', text: resultText }]
       };
     }
   );
