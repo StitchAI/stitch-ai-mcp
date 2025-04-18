@@ -1,18 +1,88 @@
-# Stitch AI MCP Server
+![image](https://github.com/user-attachments/assets/6533769e-dc98-4e64-a4ae-bfacc72f75fc)
+[![StitchAI](https://img.shields.io/twitter/follow/StitchAI_hq?style=social&logo=twitter)](https://x.com/StitchAI_hq)
+[![version](https://img.shields.io/badge/version-0.1.0-yellow.svg)](https://semver.org)
 
-A MCP server for **Stitch AI** memory management. It provides:
+# Stitch AI's MCP Server
 
-- **Save**, **retrieve**, **list**, and **search** memory entries via MCP tools
-- **Version management** for memory entries
-- Local in-memory datastore with optional syncing to Stitch AI via HTTP API
-- **API Key** authentication
-- **Server-Sent Events (SSE)** for MCP communication
+> Decentralized Knowledge Hub for AI
 
-### Features
+> This repository contains a Model Context Protocol (MCP) server implementation for Stitch AI's memory management system. The server provides tools for creating, retrieving, and managing AI agent memories.
 
-- `save_memory`: store or update memory entries
-- `get_memory`: retrieve a specific or latest version
-- `get_all_memories`: list all stored memories
-- `search_memories`: keyword search over memories
+---
 
-### Usage
+## Available Tools
+
+The MCP server provides the following tools:
+
+### `create_space`
+Creates a new memory space with the specified name.
+- Parameters:
+  - `space_name`: The name of the memory space to create
+
+### `delete_space`
+Deletes a memory space with the specified name.
+- Parameters:
+  - `space_name`: The name of the memory space to delete
+
+### `get_all_spaces`
+Gets a list of all available memory spaces.
+- Parameters: None
+
+### `upload_memory`
+Uploads a new memory to a specified memory space.
+- Parameters:
+  - `space`: The name of the memory space to upload to
+  - `message`: The memory message to upload
+  - `episodic_memory`: The episodic memory content
+
+### `get_memory`
+Retrieves a specific memory by ID from a memory space.
+- Parameters:
+  - `space`: The name of the memory space
+  - `memory_id`: The ID of the memory to retrieve
+
+### `get_all_memories`
+Retrieves all memories from a specified memory space.
+- Parameters:
+  - `space`: The name of the memory space to retrieve memories from
+
+---
+
+
+### Run the server
+
+```bash
+npm run start
+```
+
+---
+
+
+### Using with Claude Desktop
+
+To use this MCP server with Claude Desktop, modify your `claude_desktop_config.json` file as shown below:
+
+```json
+{
+    "mcpServers": {
+        "stitchai": {
+            "command": "npx",
+            "args": [
+                "ts-node",
+                "<YOUR_REPO_PATH>/src/server.ts"
+            ],
+            "env": {
+                "API_KEY": "<STITCH_AI_API_KEY>",
+                "BASE_URL": "https://api-devnet.stitch-ai.co"
+            }
+        }
+    }
+}
+```
+
+
+---
+
+### Contact
+
+https://x.com/StitchAI_hq
