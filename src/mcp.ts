@@ -7,9 +7,10 @@ import { registerGetMemory } from './tools/getMemory';
 import { registerGetAllMemories } from './tools/getAllMemories';
 import { registerUploadMemory } from './tools/uploadMemory';
 import { registerAllPrompts } from './prompts';
+import { registerAllResources } from './resources';
 
 export function createMcpServer(apiKey: string, baseURL: string): McpServer {
-  const server = new McpServer({ name: 'StitchAI Memory MCP Server', version: '0.1.1' });
+  const server = new McpServer({ name: 'StitchAI Memory MCP Server', version: '0.1.2' });
   const httpClient = createHttpClient(baseURL, apiKey);
   registerCreateSpace(server, httpClient);
   registerDeleteSpace(server, httpClient);
@@ -19,5 +20,7 @@ export function createMcpServer(apiKey: string, baseURL: string): McpServer {
   registerGetAllMemories(server, httpClient);
 
   registerAllPrompts(server);
+
+  registerAllResources(server, httpClient);
   return server;
 }
