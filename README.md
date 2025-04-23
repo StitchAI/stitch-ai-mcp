@@ -59,9 +59,29 @@ npm run start
 
 
 ### Using with Claude Desktop
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/StitchAI/stitch-ai-mcp.git
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install @modelcontextprotocol/sdk zod
+   npm install -D @types/node typescript
+   ```
+3. **Install Claude for Desktop**
+   - Download and install the latest version from Claude's website
 
-To use this MCP server with Claude Desktop, modify your `claude_desktop_config.json` file as shown below:
+4. **Configure Claude for Desktop**
+   - Locate your Claude for Desktop configuration file:
+     - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+     - **Windows**: `%AppData%\Claude\claude_desktop_config.json`
+   - Create the file if it doesn't exist
 
+5. **Edit Configuration File**
+   - Open the configuration file in a text editor:
+     - **macOS**: `code ~/Library/Application\ Support/Claude/claude_desktop_config.json`
+     - **Windows**: `code $env:AppData\Claude\claude_desktop_config.json`
+   - Add your MCP server configuration:   
 ```json
 {
     "mcpServers": {
@@ -69,7 +89,7 @@ To use this MCP server with Claude Desktop, modify your `claude_desktop_config.j
             "command": "npx",
             "args": [
                 "ts-node",
-                "<YOUR_REPO_PATH>/src/server.ts"
+                "/path/to/cloned/stitch-ai-mcp/src/server.ts"
             ],
             "env": {
                 "API_KEY": "<STITCH_AI_API_KEY>",
@@ -79,6 +99,9 @@ To use this MCP server with Claude Desktop, modify your `claude_desktop_config.j
     }
 }
 ```
+6. **Restart Claude for Desktop**
+   - After saving the configuration file, restart Claude for Desktop
+   - The MCP UI elements will appear in Claude for Desktop once at least one server is properly configured
 
 
 ---
