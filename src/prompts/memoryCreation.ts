@@ -23,7 +23,7 @@ Please help me format this information as a memory by:
 Once you've created these, use the upload_memory tool to store this in the "${space_name}" space with:
 - space: "${space_name}"
 - message: The commit-style message you created (should be brief but descriptive)
-- episodic_memory: The detailed information you formatted`
+- memory: The detailed information you formatted`
         }
       }]
     })

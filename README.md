@@ -18,6 +18,7 @@ The MCP server provides the following tools:
 Creates a new memory space with the specified name.
 - Parameters:
   - `space_name`: The name of the memory space to create
+  - `type`: The type of memory space to create
 
 ### `delete_space`
 Deletes a memory space with the specified name.
@@ -33,7 +34,7 @@ Uploads a new memory to a specified memory space.
 - Parameters:
   - `space`: The name of the memory space to upload to
   - `message`: The memory message to upload
-  - `episodic_memory`: The episodic memory content
+  - `memory`: The memory content to upload
 
 ### `get_memory`
 Retrieves a specific memory by ID from a memory space.
@@ -45,9 +46,12 @@ Retrieves a specific memory by ID from a memory space.
 Retrieves all memories from a specified memory space.
 - Parameters:
   - `space`: The name of the memory space to retrieve memories from
+  - Optional Parameters:
+    - `memory_names`: Comma-separated list of memory names to filter
+    - `limit`: Maximum number of memories to return (default: 50)
+    - `offset`: Number of memories to skip (default: 0)
 
 ---
-
 
 ### Run the server
 
@@ -56,7 +60,6 @@ npm run start
 ```
 
 ---
-
 
 ### Using with Claude Desktop
 
@@ -73,13 +76,12 @@ To use this MCP server with Claude Desktop, modify your `claude_desktop_config.j
             ],
             "env": {
                 "API_KEY": "<STITCH_AI_API_KEY>",
-                "BASE_URL": "https://api-devnet.stitch-ai.co"
+                "BASE_URL": "https://api-demo.stitch-ai.co"
             }
         }
     }
 }
 ```
-
 
 ---
 

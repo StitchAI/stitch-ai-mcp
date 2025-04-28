@@ -4,7 +4,8 @@ import { AxiosInstance } from 'axios';
 
 export function registerDeleteSpace(
   server: McpServer,  
-  httpClient: AxiosInstance
+  httpClient: AxiosInstance,
+  apiKey: string
 ) {
   server.tool(
     'delete_space',
@@ -13,7 +14,10 @@ export function registerDeleteSpace(
       space_name: z.string().describe('The name of the memory space to delete')
     },
     async ({ space_name }) => {
-      await httpClient.delete(`/memory/space/${space_name}`);
+      const userResponse = await httpClient.get(`/user/api-key/user?apiKey=${apiKey}`);
+      const userId = userResponse.data.userId;
+
+      await httpClient.delete(`/memory/space/${space_name}?apiKey=${apiKey}&userId=${userId}`);
 
       return {
         content: [{ type: 'text', text: `Memory space deleted (name: ${space_name})` }]

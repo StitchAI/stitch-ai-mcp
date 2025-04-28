@@ -4,7 +4,8 @@ import { AxiosInstance } from 'axios';
 
 export function registerUploadMemory(
   server: McpServer,  
-  httpClient: AxiosInstance
+  httpClient: AxiosInstance,
+  apiKey: string
 ) {
   server.tool(
     'upload_memory',
@@ -12,13 +13,20 @@ export function registerUploadMemory(
     { 
       space: z.string().describe('The name of the memory space to upload to'),
       message: z.string().describe('The memory message to upload'),
-      episodic_memory: z.string().describe('The episodic memory content')
+      memory: z.string().describe('The episodic memory content')
     },
-    async ({ space, message, episodic_memory }) => {
-      const response = await httpClient.post(`/memory/${space}`, {
-        message: message,
-        episodicMemory: episodic_memory,
-        characterMemory: ''
+    async ({ space, message, memory }) => {
+      const userResponse = await httpClient.get(`/user/api-key/user?apiKey=${apiKey}`);
+      const userId = userResponse.data.userId;
+
+      const response = await httpClient.post(`/memory/${space}/create?apiKey=${apiKey}&userId=${userId}`, {
+        files: [
+          {
+            filePath: 'episodic',
+            content: memory
+          }
+        ],
+        message: message
       });
       
       const memoryData = response.data;
