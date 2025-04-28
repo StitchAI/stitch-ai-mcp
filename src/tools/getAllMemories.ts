@@ -3,38 +3,48 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { AxiosInstance } from 'axios';
 
 export function registerGetAllMemories(
-  server: McpServer,  
-  httpClient: AxiosInstance
+  server: McpServer,
+  httpClient: AxiosInstance,
+  apiKey: string
 ) {
   server.tool(
     'get_all_memories',
-    'Retrieves all memories from a specified memory space',
-    { 
-      space: z.string().describe('The name of the memory space to retrieve memories from')
+    'Gets all memories for a user with optional filtering',
+    {
+      memory_names: z.string().optional().describe('Comma-separated list of memory names to filter'),
+      limit: z.string().optional().describe('Maximum number of memories to return'),
+      offset: z.string().optional().describe('Number of memories to skip')
     },
-    async ({ space }) => {
-      const response = await httpClient.get(`/memory/${space}`);
-      
-      const spaceData = response.data;
-      let resultText = `Memory space: ${spaceData.name}\n\n`;
-      
-      if (spaceData.memory) {
-        resultText += `Current memory:\n- ID: ${spaceData.memory.id}\n- Message: ${spaceData.memory.message}\n\n`;
-      } else {
-        resultText += "No current memory found.\n\n";
-      }
-      
-      if (spaceData.histories && spaceData.histories.length > 0) {
-        resultText += "Memory history:\n";
-        spaceData.histories.forEach((memory: any, index: number) => {
-          resultText += `${index + 1}. ID: ${memory.id}, Message: ${memory.message}\n`;
-        });
-      } else {
-        resultText += "No memory history found.";
-      }
-      
+    async ({ memory_names, limit = '50', offset = '0' }) => {
+      // First, get the userId using the apiKey
+      const userResponse = await httpClient.get(`/user/api-key/user?apiKey=${apiKey}`);
+      const userId = userResponse.data.userId;
+
+      // Build query parameters
+      const queryParams = new URLSearchParams({
+        apiKey,
+        ...(memory_names && { memoryNames: memory_names }),
+        limit,
+        offset,
+        userId
+      });
+
+      // Get user memories
+      const response = await httpClient.get(`/user/memory/all?${queryParams.toString()}`);
+      const memories = response.data;
+
+      // Format the response
+      const formattedMemories = memories.map((memory: any) => 
+        `- ${memory.name}: ${memory.content}`
+      ).join('\n');
+
       return {
-        content: [{ type: 'text', text: resultText }]
+        content: [{ 
+          type: 'text', 
+          text: formattedMemories.length > 0 
+            ? `User memories:\n${formattedMemories}` 
+            : 'No memories found.'
+        }]
       };
     }
   );

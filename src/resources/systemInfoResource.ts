@@ -7,14 +7,13 @@ export function registerSystemInfoResource(server: McpServer) {
     async (uri) => {
       const info = {
         name: 'StitchAI Memory MCP Server',
-        version: '0.1.2',
+        version: '0.2.0',
         description: 'Decentralized Knowledge Hub for AI',
         availableTools: [
           'create_space - Creates a new memory space',
           'delete_space - Deletes a memory space',
           'get_all_spaces - Gets a list of all memory spaces',
           'upload_memory - Uploads a new memory to a memory space',
-          'get_memory - Retrieves a specific memory from a space',
           'get_all_memories - Retrieves all memories from a space'
         ],
         availablePrompts: [

@@ -1,0 +1,4 @@
+export enum MemorySpaceType {
+  AGENT_MEMORY = 'AGENT_MEMORY',
+  EXTERNAL_MEMORY = 'EXTERNAL_MEMORY'
+} 
