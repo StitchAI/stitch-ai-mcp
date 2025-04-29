@@ -35,7 +35,7 @@ export function registerGetAllMemories(
 
       // Format the response
       const formattedMemories = memories.map((memory: any) => 
-        `- ${memory.name}: ${memory.content}`
+        `- ${memory.name}: ${memory.episodicMemory.content}`
       ).join('\n');
 
       return {

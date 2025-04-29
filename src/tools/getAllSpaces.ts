@@ -16,9 +16,9 @@ export function registerGetAllSpaces(
 
       const response = await httpClient.get(`/user/memory-space?userId=${userId}`);
       
-      const spaces = response.data.data || [];
+      const spaces = response.data || [];
       const spacesList = spaces.map((space: any) => 
-        `- ${space.name} (ID: ${space.id})`
+        `- ${space.name} (Type: ${space.type}, Created At: ${space.createdAt})`
       ).join('\n');
       
       return {

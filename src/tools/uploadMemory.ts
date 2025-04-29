@@ -22,7 +22,7 @@ export function registerUploadMemory(
       const response = await httpClient.post(`/memory/${space}/create?apiKey=${apiKey}&userId=${userId}`, {
         files: [
           {
-            filePath: 'episodic',
+            filePath: 'episodic.data',
             content: memory
           }
         ],
